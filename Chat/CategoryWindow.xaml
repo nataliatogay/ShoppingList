@@ -1,0 +1,150 @@
+﻿<Window x:Class="Chat.CategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chat"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="CategoryWindow" 
+        Height="500"
+        Width="500"
+        Name="categoryWindow"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="ProdCategory">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:ProductCategory" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ControlTemplate x:Key="btnRoundTemplate" TargetType="Button">
+            <Border BorderThickness ="0"
+                        CornerRadius="5"
+                        Name="border">
+                <Border.Background>
+                    <SolidColorBrush x:Name="brush"
+                                         Color="LightSteelBlue"/>
+                </Border.Background>
+                <Label HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Name="label"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center">
+                    <ContentPresenter/>
+                </Label>
+            </Border>
+            <ControlTemplate.Triggers>
+                <EventTrigger SourceName="border" 
+                                  RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="SteelBlue"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetName="brush"
+                                                Storyboard.TargetProperty="Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+
+                <EventTrigger SourceName="border"
+                                  RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="LightSteelBlue"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetName="brush"
+                                                Storyboard.TargetProperty="Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    
+    <Grid MinWidth="300">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="150"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"
+                              MinWidth="200"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <ToolBar DockPanel.Dock="Top">
+                <Label Content="Categories:"
+                       Foreground="#37455D"/>
+            </ToolBar>
+            <ListBox Margin="5 5 5 5"
+                     Name="categoryListBox" 
+                     ItemsSource="{Binding Source={StaticResource ProdCategory}}"
+                     SelectionChanged="categoryListBox_SelectionChanged" Foreground="#37455D">
+
+            </ListBox>
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" 
+                              Width="3" 
+                              HorizontalAlignment="Stretch" 
+                              Background="#5A78A8"/>
+        <DockPanel Grid.Column="2">
+            <ToolBar DockPanel.Dock="Top">
+                <Button Name="newProductBtn" 
+                        Content="New product"
+                        Foreground="#37455D"
+                        Click="NewProductButton_Click" 
+                        IsEnabled="False"/>
+                <Button Name="editProductBtn"
+                        Content="Edit product"
+                        Foreground="#37455D"
+                        Click="EditProductButton_Click"
+                        IsEnabled="False"/>
+            </ToolBar>
+
+            <ListBox Margin="5 5 5 5"
+                     Name="productListBox"
+                     ItemsSource="{Binding Path=SelectedCategory}"
+                     ToolTipService.IsEnabled="True"
+                     MouseDoubleClick="productListBox_MouseDoubleClick"
+                     SelectionChanged="productListBox_SelectionChanged">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <Image Stretch="UniformToFill"
+                           Source="{Binding Path=ImgPath}" 
+                                       Height="40" Width="40"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="{Binding ElementName=productListBox, Path=ActualWidth}" >
+                            <DockPanel Background="LightSteelBlue" Margin="5 0 20 0">
+                                <Button DockPanel.Dock="Right"
+                                        Template="{StaticResource btnRoundTemplate}"
+                                        Padding="3" 
+                                        Width="30"
+                                        Height="30"
+                                        BorderThickness="0"
+                                        Tag="{Binding}" 
+                                        Background="LightSteelBlue"
+                                        Foreground="White" 
+                                        Click="addButton_Click">
+                                    <Image Source="icons\done.png"/>
+                                </Button>
+                                <TextBlock DockPanel.Dock="Left" 
+                                           Text="{Binding Path=Name}"
+                                           Foreground="#37455D"
+                                           Padding="5"
+                                           VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+    </Grid>
+</Window>

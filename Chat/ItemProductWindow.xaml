@@ -1,0 +1,68 @@
+﻿<Window x:Class="Chat.ItemProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chat"
+        mc:Ignorable="d"
+        Title="ItemProductWindow"
+        Height="300"
+        Width="300"
+        MaxHeight="300"
+        MaxWidth="300"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <StackPanel Margin="0 5 0 0"
+                Orientation="Vertical">
+        <DockPanel Margin="6">
+            <TextBox DockPanel.Dock="Right" 
+                     Height="30" Width="150"
+                     VerticalContentAlignment="Center"
+                     Padding="5"
+                     Text="{Binding Prod.Name, Mode=TwoWay}"/>
+            <Label Content="Product name: "/>
+        </DockPanel>
+        <DockPanel Margin="6">
+            <TextBox DockPanel.Dock="Right" 
+                     Height="30" 
+                     Width="150"
+                     VerticalContentAlignment="Center"
+                     Padding="5"
+                     Text="{Binding Prod.Measure, Mode=TwoWay}"/>
+            <Label Content="Measure: "/>
+        </DockPanel>
+        <DockPanel Margin="6">
+            <TextBox DockPanel.Dock="Right" 
+                     Height="30"
+                     Width="150"
+                     VerticalContentAlignment="Center"
+                     Padding="5"
+                     Text="{Binding Prod.Unit, Mode=TwoWay}"/>
+            <Label Content="Unit: "/>
+        </DockPanel>
+
+        <DockPanel Margin="6">
+            <TextBox DockPanel.Dock="Right"
+                     Height="30"
+                     Width="150"
+                     VerticalContentAlignment="Center"
+                     Padding="5"
+                     Text="{Binding Prod.Price, Mode=TwoWay}"/>
+            <Label Content="Price: "/>
+        </DockPanel>
+
+        <DockPanel Margin="6">
+            <TextBox DockPanel.Dock="Right"
+                     Height="30"
+                     Width="150"
+                     VerticalContentAlignment="Center"
+                     Padding="5"
+                     Text="{Binding Prod.Description, Mode=TwoWay}"/>
+            <Label Content="Description: "/>
+        </DockPanel>
+
+        <Button Margin="6"
+                Content="Apply"
+                Height="30"
+                Click="ApplyButton_Click" />
+    </StackPanel>
+</Window>

@@ -1,0 +1,222 @@
+﻿<Window x:Class="Chat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chat"
+        mc:Ignorable="d"
+        Title="ShoppingList" 
+        Height="525"
+        Width="800" 
+        MinHeight="300" 
+        MinWidth="200"
+        Background="#364764" 
+        Closing="mainWindow_Closing"
+        Name="mainWindow"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ControlTemplate x:Key="btnRoundTemplate" TargetType="Button">
+                <Border BorderThickness ="0"
+                        CornerRadius="5"
+                        Name="border">
+                    <Border.Background>
+                        <SolidColorBrush x:Name="brush"
+                                         Color="LightSteelBlue"/>
+                    </Border.Background>
+                    <Label HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Name="label"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center">
+                        <ContentPresenter/>
+                    </Label>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <EventTrigger SourceName="border" 
+                                  RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation To="SteelBlue"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetName="brush"
+                                                Storyboard.TargetProperty="Color"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <EventTrigger SourceName="border"
+                                  RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation To="LightSteelBlue"
+                                                Duration="0:0:0.2"
+                                                Storyboard.TargetName="brush"
+                                                Storyboard.TargetProperty="Color"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File" 
+                      Foreground="#37455D">
+                <MenuItem Header="_New list"
+                          Foreground="#37455D"
+                          Click="NewListMenuItem_Click"/>
+                <MenuItem Header="_Open list"
+                          Foreground="#37455D"
+                          Click="OpenListMenuItem_Click"/>
+                <MenuItem Header="_Save list"
+                          Foreground="#37455D"
+                          Click="SaveListMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <ToolBar DockPanel.Dock="Top">
+            <!--<DockPanel>
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Total price:"
+                           Foreground="#37455D"/>
+                    <Label Content="{Binding TotalPrice}"
+                           Foreground="#37455D"/>
+                </StackPanel>
+                <Button Content="New item"
+                        Foreground="#37455D"
+                        Click="newItemButton_Click"/>
+            </DockPanel>-->
+            <Button Content="New item"
+                        Foreground="#37455D"
+                        Click="newItemButton_Click"/>
+            <StackPanel Margin="300 0 0 0"
+                            Orientation="Horizontal" HorizontalAlignment="Right">
+                <Label Content="Total price:"
+                           Foreground="#37455D"/>
+                <Label Content="{Binding TotalPrice}"
+                           Foreground="#37455D"/>
+            </StackPanel>
+        </ToolBar>
+
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="100" 
+                               MaxHeight="200" 
+                               MinHeight="32"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <ListBox Name="listBoxToBuy" 
+                         Margin="3 3 3 0"  
+                         Background="#EAEAEA"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ItemsSource="{Binding ElementName=mainWindow, Path=ItemsInList}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="{Binding ElementName=listBoxToBuy, Path=ActualWidth}" >
+                                <DockPanel Background="LightSteelBlue" Margin="5 0 20 0">
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                        <Button  Width="30"
+                                                 Height="30"
+                                                 Template="{StaticResource btnRoundTemplate}"
+                                                 Click="PurchasedButton_Click">
+                                            <Image Source="icons\done.png"/>
+                                        </Button>
+                                        <Button  Width="30" Height="30"
+                                                 Template="{StaticResource btnRoundTemplate}"
+                                                 Click="DeleteButton_Click">
+                                            <Image Source="icons\delete.png"/>
+                                        </Button>
+                                        <Button  Width="30"
+                                                 Height="30"
+                                                 Template="{StaticResource btnRoundTemplate}"
+                                                 Click="MinusButton_Click">
+                                            <Image Source="icons\minus.png"/>
+                                        </Button>
+                                        <Border Grid.Column="5"
+                                                CornerRadius ="5" 
+                                                Background="LightSteelBlue"
+                                                Padding="5">
+                                            <TextBox Text="{Binding Path=ItemCount}"
+                                                     Background="LightSteelBlue"
+                                                     BorderThickness="0" 
+                                                     HorizontalContentAlignment="Right"
+                                                     Foreground="#37455D"
+                                                     Width="30"
+                                                     IsReadOnly="True"/>
+                                        </Border>
+                                        <Border Grid.Column="6" 
+                                                CornerRadius ="5"
+                                                Background="LightSteelBlue" 
+                                                Padding="5">
+                                            <TextBox Text="{Binding Path=ItemName.Measure}"
+                                                     Background="LightSteelBlue"
+                                                     BorderThickness="0"
+                                                     Width="50"
+                                                     Foreground="#37455D"
+                                                     IsReadOnly="True"/>
+                                        </Border>
+                                        <Button  Width="30"
+                                                 Height="30"
+                                                 Template="{StaticResource btnRoundTemplate}"
+                                                 Click="PlusButton_Click">
+                                            <Image Source="icons\plus.png"/>
+                                        </Button>
+                                    </StackPanel>
+                                    <Border DockPanel.Dock="Left" 
+                                            CornerRadius ="5" 
+                                            Background="LightSteelBlue">
+                                        <Label  Content="{Binding Path=ItemName.Name}"
+                                                Background="LightSteelBlue" 
+                                                Foreground="#37455D"
+                                                BorderThickness="0"/>
+                                    </Border>
+                                </DockPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </Grid>
+            <GridSplitter Grid.Row="1" 
+                          Height="3" 
+                          HorizontalAlignment="Stretch" 
+                          Background="#364764"/>
+            <Grid Grid.Row="2" 
+                  Margin="3 0 3 3" 
+                  Background="White" 
+                  Width="{Binding ElementName=listBoxChat, Path=ActualWidth}">
+                <ListBox Name="listBoxDeleted" 
+                         Background="#EAEAEA" 
+                         Padding="5" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ItemsSource="{Binding ElementName=mainWindow, Path=ItemsPurchased}"
+                         SelectionChanged="listBoxDeleted_SelectionChanged"
+                         >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Border CornerRadius ="5" 
+                                        Background="LightSteelBlue"
+                                        Padding="5">
+                                    <TextBox Text="{Binding Path=ItemName.Name}" 
+                                             TextDecorations="Strikethrough" 
+                                             Background="LightSteelBlue" 
+                                             BorderThickness="0"
+                                             IsReadOnly="True"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
